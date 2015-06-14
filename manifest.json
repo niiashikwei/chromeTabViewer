@@ -5,10 +5,16 @@
 	"description": "preview all your open tabs in grid view",
 	"browser_action" : {
 		"default_icon": "icons/tab-viewer-logo.png",
-		"default_title": "displays grid view of open tabs",
-		"default_popup": "popup.html"
+		"default_title": "displays grid view of open tabs"
 	},
 	"permissions": [
-		"tabs"
-	]
+		"tabs",
+		"activeTab"
+	],
+    "background":{
+        "scripts": ["background.js"]
+    },
+    "chrome_url_overrides" : {
+        "newtab": "main.html"
+    }
 }
