@@ -1,5 +1,5 @@
 
-function getCurrentWindowTabs(){
+function loadCurrentWindowTabs(){
     chrome.tabs.query({"currentWindow": true}, function (arrayOfTab) {
         for (i = 0; i < arrayOfTab.length - 2; i++) {
             (function () {
@@ -17,8 +17,12 @@ function getCurrentWindowTabs(){
                 tile = document.createElement('div');
                 tile.setAttribute('class', 'tile');
                 tile.addEventListener('click', function () {
+                    //switch to selected tab
                     chrome.tabs.update(tab.tabId, {selected: true}, function () {
-                        console.log("updating selected tab");
+                        console.log("switching to selected tab");
+                    });
+                    chrome.tabs.remove(arrayOfTab[arrayOfTab.length - 1].id, function(){
+                        console.log("removing extension page");
                     });
                 });
 
@@ -36,18 +40,16 @@ function getCurrentWindowTabs(){
                 row.appendChild(tile);
                 document.getElementById("container").appendChild(row);
             }());
-            console.log("got array of Tabs");
-        }});
-    }
+
+        }
+        console.log("done");
+    });
+}
 
 function saveTabCollection(){
     console.log("coming soon!");
 }
 
-function jumpToTab(){
-    console.log("coming soon!");
-}
-
 document.addEventListener("DOMContentLoaded", function(event) {
-    getCurrentWindowTabs();
+    loadCurrentWindowTabs();
 });
