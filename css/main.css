@@ -35,3 +35,8 @@ html, body{
 .tile:hover {
     background-color: #ecffe7;
 }
+
+.favIcon{
+    display:block;
+    margin:auto;
+}
