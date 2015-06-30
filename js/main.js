@@ -26,17 +26,19 @@ function loadCurrentWindowTabs(){
                     });
                 });
 
-                img = document.createElement('img');
-                img.setAttribute('class', 'favIcon');
-                img.setAttribute('src', tab.icon);
-                img.setAttribute('width', '40px');
-                img.setAttribute('height', '40px');
-
                 h3 = document.createElement('h3');
                 h3.innerText = tab.tabTitle;
-
                 tile.appendChild(h3);
-                tile.appendChild(img);
+
+                if(tab.icon != undefined){
+                    img = document.createElement('img');
+                    img.setAttribute('class', 'favIcon');
+                    img.setAttribute('src', tab.icon);
+                    img.setAttribute('width', '40px');
+                    img.setAttribute('height', '40px');
+                    tile.appendChild(img);
+                }
+
                 row.appendChild(tile);
                 document.getElementById("container").appendChild(row);
             }());

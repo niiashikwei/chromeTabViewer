@@ -39,4 +39,5 @@ html, body{
 .favIcon{
     display:block;
     margin:auto;
+    -webkit-user-select: none;
 }
