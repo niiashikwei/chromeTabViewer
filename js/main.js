@@ -52,6 +52,10 @@ function saveTabCollection(){
     console.log("coming soon!");
 }
 
+function closeTabFromTile(){
+    console.log("coming soon!");
+}
+
 document.addEventListener("DOMContentLoaded", function(event) {
     loadCurrentWindowTabs();
 });
