@@ -2,10 +2,10 @@
     "name": "Tab Viewer",
 	"version": "0.0.2",
 	"manifest_version" : 2,
-	"description": "preview all your open activeTabs in grid view",
+	"description": "Preview all your open tabs in a grid view",
 	"browser_action" : {
 		"default_icon": "icons/tab-viewer-logo.png",
-		"default_title": "displays grid view of open activeTabs"
+		"default_title": "displays grid view of open tabs"
 	},
 	"permissions": [
 		"tabs",
@@ -14,5 +14,15 @@
 	],
     "background":{
         "scripts": ["background.js"]
+    },
+    "commands": {
+        "_execute_browser_action": {
+            "suggested_key": {
+                "windows": "Ctrl+T",
+                "mac": "MacCtrl+T",
+                "chromeos": "Ctrl+T",
+                "linux": "Ctrl+T"
+            }
+        }
     }
 }
