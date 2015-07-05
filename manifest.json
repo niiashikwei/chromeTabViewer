@@ -1,5 +1,6 @@
 {
     "name": "Tab Viewer",
+    "short_name": "Tab Viewer",
 	"version": "0.0.3",
 	"manifest_version" : 2,
 	"description": "Preview all your open tabs in a grid view",
@@ -18,10 +19,10 @@
     "commands": {
         "_execute_browser_action": {
             "suggested_key": {
-                "windows": "Ctrl+T",
-                "mac": "MacCtrl+T",
-                "chromeos": "Ctrl+T",
-                "linux": "Ctrl+T"
+                "windows": "Alt+T",
+                "mac": "Alt+T",
+                "chromeos": "Alt+T",
+                "linux": "Alt+T"
             }
         }
     }
