@@ -2,3 +2,4 @@
 .idea/
 *.iml
 package_images/
+pkg/
