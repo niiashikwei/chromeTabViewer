@@ -1,7 +1,7 @@
 
 function loadCurrentWindowTabs(){
     chrome.tabs.query({"currentWindow": true}, function (arrayOfTab) {
-        for (i = 0; i < arrayOfTab.length - 2; i++) {
+        for (i = 0; i < arrayOfTab.length - 1; i++) {
             (function () {
                 var tab = {
                     "tabId": arrayOfTab[i].id,
