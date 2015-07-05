@@ -1,5 +1,5 @@
 {
-	"name": "TabViewerExtension",
+    "name": "Tab Viewer",
 	"version": "0.0.1",
 	"manifest_version" : 2,
 	"description": "preview all your open activeTabs in grid view",
