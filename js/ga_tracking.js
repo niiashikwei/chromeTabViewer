@@ -10,9 +10,3 @@ _gaq.push(['_trackPageview']);
     var s = document.getElementsByTagName('script')[0];
     s.parentNode.insertBefore(ga, s);
 })();
-
-chrome.windows.getCurrent({populate: true}, function(window){
-    chrome.browserAction.onClicked.addListener(function(activeTab){
-        chrome.tabs.create({url: 'main.html', windowId: window.id});
-    });
-});
