@@ -1,10 +1,4 @@
 function executeTasks(tab, tabViewerTabId) {
-    var tabObject = {
-        "tabId": tab.id,
-        "tabTitle": tab.title,
-        "icon": tab.favIconUrl
-    };
-
     return function () {
         if (tab.index % 3 == 0) {
             row = document.createElement('div');
@@ -15,7 +9,7 @@ function executeTasks(tab, tabViewerTabId) {
         tile.setAttribute('class', 'tile');
         tile.addEventListener('click', function () {
             //switch to selected tab
-            chrome.tabs.update(tabObject.tabId, {selected: true}, function () {
+            chrome.tabs.update(tab.id, {selected: true}, function () {
                 console.log("switching to selected tab");
             });
 
@@ -25,13 +19,13 @@ function executeTasks(tab, tabViewerTabId) {
         });
 
         h3 = document.createElement('h3');
-        h3.innerText = tabObject.tabTitle;
+        h3.innerText = tab.title;
         tile.appendChild(h3);
 
-        if (tabObject.icon != undefined) {
+        if (tab.favIconUrl != undefined) {
             img = document.createElement('img');
             img.setAttribute('class', 'favIcon');
-            img.setAttribute('src', tabObject.icon);
+            img.setAttribute('src', tab.favIconUrl);
             img.setAttribute('width', '40px');
             img.setAttribute('height', '40px');
             tile.appendChild(img);
@@ -43,8 +37,10 @@ function executeTasks(tab, tabViewerTabId) {
 }
 function loadCurrentWindowTabs(){
     chrome.tabs.query({"currentWindow": true}, function (arrayOfTab) {
-        var tabViewerId = arrayOfTab[arrayOfTab.length - 1].id;
-        for (i = 0; i < tabViewerId; i++) {
+        var tabViewerPosition = (arrayOfTab.length - 1);
+        var tabViewerId = arrayOfTab[ tabViewerPosition].id;
+
+        for (i = 0; i < tabViewerPosition; i++) {
             executeTasks(arrayOfTab[i], tabViewerId);
         }
         console.log("done");
