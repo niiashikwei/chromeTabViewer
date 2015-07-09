@@ -1,36 +1,47 @@
-function executeTasks(tab, tabViewerTabId) {
-    return function () {
-        if (tab.index % 3 == 0) {
-            row = document.createElement('div');
-            row.setAttribute('class', 'row');
-        }
-
-        tile = document.createElement('div');
-        tile.setAttribute('class', 'tile');
-        tile.addEventListener('click', function () {
-            //switch to selected tab
-            chrome.tabs.update(tab.id, {selected: true}, function () {
-                console.log("switching to selected tab");
-            });
-
-            chrome.tabs.remove(tabViewerTabId, function () {
-                console.log("removing extension page");
-            });
+function addTileClickEvent(tile, tab, tabViewerTabId) {
+    tile.addEventListener('click', function () {
+        //switch to selected tab
+        chrome.tabs.update(tab.id, {selected: true}, function () {
+            console.log("switching to selected tab");
         });
 
-        h3 = document.createElement('h3');
-        h3.innerText = tab.title;
-        tile.appendChild(h3);
+        chrome.tabs.remove(tabViewerTabId, function () {
+            console.log("removing extension page");
+        });
+    });
+}
+function createTileElement(tab, tabViewerTabId) {
+    var tile = document.createElement('div');
+    tile.setAttribute('class', 'tile');
 
-        if (tab.favIconUrl != undefined) {
-            img = document.createElement('img');
-            img.setAttribute('class', 'favIcon');
-            img.setAttribute('src', tab.favIconUrl);
-            img.setAttribute('width', '40px');
-            img.setAttribute('height', '40px');
-            tile.appendChild(img);
-        }
+    var tileTitle = document.createElement('h3');
+    tileTitle.innerText = tab.title;
+    tile.appendChild(tileTitle);
 
+    if (tab.favIconUrl != undefined) {
+        var tileIcon = document.createElement('img');
+        tileIcon.setAttribute('class', 'favIcon');
+        tileIcon.setAttribute('src', tab.favIconUrl);
+        tileIcon.setAttribute('width', '40px');
+        tileIcon.setAttribute('height', '40px');
+        tile.appendChild(tileIcon);
+    }
+    return tile;
+}
+function getLastRow() {
+    var rows = document.getElementsByClassName("row");
+    var row = rows[rows.length - 1];
+    if (rows == undefined || rows.length == 0 || rows.length % 3 == 0) {
+        row = document.createElement('div');
+        row.setAttribute('class', 'row');
+    }
+    return row;
+}
+function executeTabTasks(tab, tabViewerTabId) {
+    return function () {
+        var tile = createTileElement(tab, tabViewerTabId);
+        addTileClickEvent(tile, tab, tabViewerTabId);
+        var row = getLastRow();
         row.appendChild(tile);
         document.getElementById("container").appendChild(row);
     }();
@@ -41,7 +52,7 @@ function loadCurrentWindowTabs(){
         var tabViewerId = arrayOfTab[ tabViewerPosition].id;
 
         for (i = 0; i < tabViewerPosition; i++) {
-            executeTasks(arrayOfTab[i], tabViewerId);
+            executeTabTasks(arrayOfTab[i], tabViewerId);
         }
         console.log("done");
     });
