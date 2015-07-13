@@ -1,9 +1,15 @@
 function switchToTabWithId(tab) {
-//switch to selected tab
     chrome.tabs.update(tab.id, {selected: true}, function () {
         console.log("switching to selected tab");
     });
 }
+
+function removeTabWithId(tabViewerId) {
+    chrome.tabs.remove(tabViewerId, function () {
+        console.log("removing extension page");
+    });
+}
+
 function attachTileEvents(tile, tab, tabViewerTabId) {
     tile.addEventListener('click', function () {
         switchToTabWithId(tab);
@@ -57,18 +63,16 @@ function executeTabTasks(tab, tabViewerTabId) {
     }();
 }
 
-function removeTabWithId(tabViewerId) {
-    chrome.tabs.remove(tabViewerId, function () {
-        console.log("removing extension page");
+function removeTabIfInactive(tabViewerId) {
+    chrome.tabs.query({'active': true}, function (activeTabs) {
+        if (activeTabs[0].id != tabViewerId) {
+            removeTabWithId(tabViewerId);
+        }
     });
 }
-function attachTabViewerEvents(tabViewerId) {
+function attachEventsToTabWithId(tabViewerId) {
     chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-        chrome.tabs.query({'active': true}, function (activeTabs) {
-            if (activeTabs[0].id != tabViewerId){
-                removeTabWithId(tabViewerId);
-            }
-        });
+        removeTabIfInactive(tabViewerId);
     });
 }
 
@@ -77,7 +81,7 @@ function loadTabViewer(){
         chrome.tabs.getCurrent(function(tabViewerTab){
             var tabViewerId = tabViewerTab.id;
 
-            attachTabViewerEvents(tabViewerId);
+            attachEventsToTabWithId(tabViewerId);
 
             for (i = 0; i <= arrayOfTab.length - 1; i++) {
                 var tab = arrayOfTab[i];
