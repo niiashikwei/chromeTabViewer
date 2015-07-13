@@ -76,19 +76,19 @@ function attachEventsToTabWithId(tabViewerId) {
     });
 }
 
+function executeAllTabTasks(arrayOfTab, tabViewerId) {
+    for (i = 0; i <= arrayOfTab.length - 1; i++) {
+        var tab = arrayOfTab[i];
+        if (tab.id != tabViewerId) {
+            executeTabTasks(tab, tabViewerId);
+        }
+    }
+}
 function loadTabViewer(){
     chrome.tabs.query({"currentWindow": true}, function (arrayOfTab) {
         chrome.tabs.getCurrent(function(tabViewerTab){
-            var tabViewerId = tabViewerTab.id;
-
-            attachEventsToTabWithId(tabViewerId);
-
-            for (i = 0; i <= arrayOfTab.length - 1; i++) {
-                var tab = arrayOfTab[i];
-                if(tab.id != tabViewerId){
-                    executeTabTasks(tab, tabViewerId);
-                }
-            }
+            attachEventsToTabWithId(tabViewerTab.id);
+            executeAllTabTasks(arrayOfTab, tabViewerTab.id);
         });
 
         console.log("done");
