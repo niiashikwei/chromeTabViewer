@@ -1,5 +1,5 @@
-function switchToTabWithId(tab) {
-    chrome.tabs.update(tab.id, {selected: true}, function () {
+function switchToTabWithId(tabId) {
+    chrome.tabs.update(tabId, {selected: true}, function () {
         console.log("switching to selected tab");
     });
 }
@@ -10,14 +10,19 @@ function removeTabWithId(tabViewerId) {
     });
 }
 
-function attachTileEvents(tile, tab, tabViewerTabId) {
+function attachSwitchToTabOnClickEvent(tile, tabId) {
     tile.addEventListener('click', function () {
-        switchToTabWithId(tab);
+        switchToTabWithId(tabId);
     });
-
+}
+function attachCloseTabviewerOnClick(tile, tabViewerTabId) {
     tile.addEventListener('click', function () {
         removeTabWithId(tabViewerTabId);
     });
+}
+function attachTileEvents(tile, tabId, tabViewerTabId) {
+    attachSwitchToTabOnClickEvent(tile, tabId);
+    attachCloseTabviewerOnClick(tile, tabViewerTabId);
 }
 
 function createTileElement(tab) {
@@ -59,7 +64,7 @@ function executeTabTasks(tab, tabViewerTabId) {
         var row = getRowElement();
         row.appendChild(tile);
         getTileContainerElement().appendChild(row);
-        attachTileEvents(tile, tab, tabViewerTabId);
+        attachTileEvents(tile, tab.id, tabViewerTabId);
     }();
 }
 
