@@ -1,15 +1,16 @@
+function switchToTabWithId(tab) {
+//switch to selected tab
+    chrome.tabs.update(tab.id, {selected: true}, function () {
+        console.log("switching to selected tab");
+    });
+}
 function attachTileEvents(tile, tab, tabViewerTabId) {
     tile.addEventListener('click', function () {
-        //switch to selected tab
-        chrome.tabs.update(tab.id, {selected: true}, function () {
-            console.log("switching to selected tab");
-        });
+        switchToTabWithId(tab);
     });
 
     tile.addEventListener('click', function () {
-        chrome.tabs.remove(tabViewerTabId, function () {
-            console.log("removing extension page");
-        });
+        removeTabWithId(tabViewerTabId);
     });
 }
 
@@ -56,13 +57,16 @@ function executeTabTasks(tab, tabViewerTabId) {
     }();
 }
 
+function removeTabWithId(tabViewerId) {
+    chrome.tabs.remove(tabViewerId, function () {
+        console.log("removing extension page");
+    });
+}
 function attachTabViewerEvents(tabViewerId) {
     chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
         chrome.tabs.query({'active': true}, function (activeTabs) {
             if (activeTabs[0].id != tabViewerId){
-                chrome.tabs.remove(tabViewerId, function () {
-                    console.log("removing extension page");
-                });
+                removeTabWithId(tabViewerId);
             }
         });
     });
