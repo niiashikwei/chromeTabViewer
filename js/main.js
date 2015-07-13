@@ -57,11 +57,17 @@ function executeTabTasks(tab, tabViewerTabId) {
 }
 
 function attachTabViewerEvents(tabViewerId) {
-    chrome.tabs.onCreated.addListener( function(tab){
-        chrome.tabs.sendMessage(tabViewerId, "foo", {}, loadTabViewer());
-        console.log("added newly created tab to tab viewer page");
+    chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+        chrome.tabs.query({'active': true}, function (activeTabs) {
+            if (activeTabs[0].id != tabViewerId){
+                chrome.tabs.remove(tabViewerId, function () {
+                    console.log("removing extension page");
+                });
+            }
+        });
     });
 }
+
 function loadTabViewer(){
     chrome.tabs.query({"currentWindow": true}, function (arrayOfTab) {
         chrome.tabs.getCurrent(function(tabViewerTab){
@@ -69,7 +75,7 @@ function loadTabViewer(){
 
             attachTabViewerEvents(tabViewerId);
 
-            for (i = 0; i <= arrayOfTab.length; i++) {
+            for (i = 0; i <= arrayOfTab.length - 1; i++) {
                 var tab = arrayOfTab[i];
                 if(tab.id != tabViewerId){
                     executeTabTasks(tab, tabViewerId);
