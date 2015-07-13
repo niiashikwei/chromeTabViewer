@@ -1,7 +1,7 @@
 {
     "name": "Tab Viewer",
     "short_name": "Tab Viewer",
-	"version": "0.0.5",
+	"version": "0.0.6",
 	"manifest_version" : 2,
 	"description": "Preview all your open tabs in a grid view",
 	"browser_action" : {
