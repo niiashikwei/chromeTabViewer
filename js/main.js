@@ -4,43 +4,69 @@ function switchToTabWithId(tabId) {
     });
 }
 
-function removeTabWithId(tabViewerId) {
-    chrome.tabs.remove(tabViewerId, function () {
+function removeTabWithId(tabId) {
+    chrome.tabs.remove(tabId, function () {
         console.log("removing extension page");
     });
 }
 
-function attachSwitchToTabOnClickEvent(tile, tabId) {
-    tile.addEventListener('click', function () {
+function removeTabWithIdOnCLick(element, tabId) {
+    element.addEventListener('click', function () {
+        removeTabWithId(tabId);
+    });
+}
+
+function removeParentElement(element) {
+    element.parentNode.parentNode.removeChild(element.parentNode);
+}
+
+function removeParentElementOnClick(element) {
+    element.addEventListener('click', function () {
+        removeParentElement(element)
+    });
+}
+
+function removeElementAndTabOnClick(element, tabViewerTabId) {
+    removeTabWithIdOnCLick(element, tabViewerTabId);
+    removeParentElementOnClick(element);
+}
+
+function switchToTabOnClickEvent(element, tabId) {
+    element.addEventListener('click', function () {
         switchToTabWithId(tabId);
     });
 }
-function attachCloseTabviewerOnClick(tile, tabViewerTabId) {
-    tile.addEventListener('click', function () {
-        removeTabWithId(tabViewerTabId);
-    });
-}
-function attachTileEvents(tile, tabId, tabViewerTabId) {
-    attachSwitchToTabOnClickEvent(tile, tabId);
-    attachCloseTabviewerOnClick(tile, tabViewerTabId);
-}
 
-function createTileElement(tab) {
+function createTileElement(tab, tabViewerTabId) {
     var tile = document.createElement('div');
     tile.setAttribute('class', 'tile');
 
     var tileTitle = document.createElement('h3');
     tileTitle.innerText = tab.title;
     tile.appendChild(tileTitle);
+    switchToTabOnClickEvent(tileTitle, tab.id);
+    removeTabWithIdOnCLick(tileTitle, tabViewerTabId);
 
+    var tileIcon = document.createElement('img');
+    tileIcon.setAttribute('class', 'favIcon');
     if (tab.favIconUrl != undefined) {
-        var tileIcon = document.createElement('img');
-        tileIcon.setAttribute('class', 'favIcon');
+        tileIcon.setAttribute('width', '5%');
         tileIcon.setAttribute('src', tab.favIconUrl);
-        tileIcon.setAttribute('width', '40px');
-        tileIcon.setAttribute('height', '40px');
-        tile.appendChild(tileIcon);
+    }else{
+        tileIcon.setAttribute('width', '60%');
+        tileIcon.setAttribute('alt', 'no icon');
     }
+    tile.appendChild(tileIcon);
+    switchToTabOnClickEvent(tileIcon, tab.id);
+    removeTabWithIdOnCLick(tileIcon, tabViewerTabId);
+
+    var closeButton = document.createElement('div');
+    closeButton.innerText = 'close';
+    closeButton.setAttribute('class', 'close-btn');
+    tile.appendChild(closeButton);
+    removeElementAndTabOnClick(closeButton, tab.id);
+
+
     return tile;
 }
 
@@ -60,11 +86,10 @@ function getTileContainerElement() {
 
 function executeTabTasks(tab, tabViewerTabId) {
     return function () {
-        var tile = createTileElement(tab);
+        var tile = createTileElement(tab, tabViewerTabId);
         var row = getRowElement();
         row.appendChild(tile);
         getTileContainerElement().appendChild(row);
-        attachTileEvents(tile, tab.id, tabViewerTabId);
     }();
 }
 

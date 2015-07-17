@@ -6,17 +6,12 @@ html, body{
     height: 100%;
 }
 
-#image{
-    width: 400px;
-    height: 400px;
-}
-
 .container{
     width: 100%;
 }
 
 .row{
-    height: 13%;
+    height: 15%;
     width: 100%;
 }
 
@@ -32,6 +27,11 @@ html, body{
     outline: 1px black solid;
 }
 
+.tile h3{
+    margin: 0;
+    height: 60%;
+}
+
 .tile:hover {
     background-color: #ecffe7;
 }
@@ -40,4 +40,16 @@ html, body{
     display:block;
     margin:auto;
     -webkit-user-select: none;
+    padding : 5px;
+    height: 20%;
+}
+
+.close-btn{
+    padding-top: 5px;
+    border-top: 1px black solid;
+    height: 20%;
+}
+
+.close-btn:hover{
+    background-color: #ff7f7d;
 }
